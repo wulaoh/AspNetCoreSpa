@@ -1,25 +1,28 @@
-FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 # Setup NodeJs
-RUN apt-get update -qq && \
-    apt-get install -qq -y wget && \
-    apt-get install -qq -y gnupg2 && \
-    wget -qO- https://deb.nodesource.com/setup_8.x | bash - && \
-    apt-get install -qq -y build-essential nodejs && \
-    apt-get install -qq -y nginx
+RUN apt-get -qq update && \
+    apt-get -qq install -y wget && \
+    apt-get -qq install -y gnupg2 && \
+    wget -qO- https://deb.nodesource.com/setup_12.x | bash - && \
+    apt-get -qq install -y build-essential nodejs && \
+    apt-get -qq install -y nginx
 # End setup
 
 WORKDIR /app
 
-EXPOSE 5050
+EXPOSE 80
+EXPOSE 443
 
-FROM microsoft/dotnet:2.1-sdk AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 # Setup NodeJs
-RUN apt-get update -qq && \
-    apt-get install -qq -y wget && \
-    apt-get install -qq -y gnupg2 && \
-    wget -qO- https://deb.nodesource.com/setup_8.x | bash - && \
-    apt-get install -qq -y build-essential nodejs && \
-    apt-get install -qq -y nginx
+RUN apt-get -qq update && \
+    apt-get -qq install -y wget && \
+    apt-get -qq install -y gnupg2 && \
+    wget -qO- https://deb.nodesource.com/setup_12.x | bash - && \
+    apt-get -qq install -y build-essential nodejs && \
+    apt-get -qq install -y nginx
 # End setup
 
 WORKDIR /src
@@ -33,7 +36,7 @@ RUN cd src/AspNetCoreSpa.Web/ClientApp \
     && npm i --silent
 
 COPY . .
-WORKDIR "/src/src/AspNetCoreSpa.Web"
+WORKDIR /src/src/AspNetCoreSpa.Web
 RUN dotnet build "AspNetCoreSpa.Web.csproj" -c Release -o /app
 
 FROM build AS publish

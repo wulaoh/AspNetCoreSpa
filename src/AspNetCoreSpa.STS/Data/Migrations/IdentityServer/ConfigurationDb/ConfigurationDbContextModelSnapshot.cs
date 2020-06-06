@@ -14,24 +14,41 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.3-rtm-32065");
+                .HasAnnotation("ProductVersion", "3.1.0");
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiResource", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(1000);
 
                     b.Property<string>("DisplayName")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
-                    b.Property<bool>("Enabled");
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastAccessed")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(200);
+
+                    b.Property<bool>("NonEditable")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -44,13 +61,15 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiResourceClaim", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ApiResourceId")
-                        .IsRequired();
+                    b.Property<int>("ApiResourceId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Type")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -60,29 +79,62 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
                     b.ToTable("ApiClaims");
                 });
 
+            modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiResourceProperty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ApiResourceId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(2000);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApiResourceId");
+
+                    b.ToTable("ApiProperties");
+                });
+
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiScope", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ApiResourceId")
-                        .IsRequired();
+                    b.Property<int>("ApiResourceId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(1000);
 
                     b.Property<string>("DisplayName")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
-                    b.Property<bool>("Emphasize");
+                    b.Property<bool>("Emphasize")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
-                    b.Property<bool>("Required");
+                    b.Property<bool>("Required")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ShowInDiscoveryDocument");
+                    b.Property<bool>("ShowInDiscoveryDocument")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -97,13 +149,15 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiScopeClaim", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ApiScopeId")
-                        .IsRequired();
+                    b.Property<int>("ApiScopeId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Type")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -116,21 +170,31 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiSecret", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ApiResourceId")
-                        .IsRequired();
+                    b.Property<int>("ApiResourceId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(1000);
 
-                    b.Property<DateTime?>("Expiration");
+                    b.Property<DateTime?>("Expiration")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(250);
 
                     b.Property<string>("Value")
-                        .HasMaxLength(2000);
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(4000);
 
                     b.HasKey("Id");
 
@@ -142,87 +206,144 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.Client", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int>("AbsoluteRefreshTokenLifetime");
+                    b.Property<int>("AbsoluteRefreshTokenLifetime")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int>("AccessTokenLifetime");
+                    b.Property<int>("AccessTokenLifetime")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int>("AccessTokenType");
+                    b.Property<int>("AccessTokenType")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("AllowAccessTokensViaBrowser");
+                    b.Property<bool>("AllowAccessTokensViaBrowser")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("AllowOfflineAccess");
+                    b.Property<bool>("AllowOfflineAccess")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("AllowPlainTextPkce");
+                    b.Property<bool>("AllowPlainTextPkce")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("AllowRememberConsent");
+                    b.Property<bool>("AllowRememberConsent")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("AlwaysIncludeUserClaimsInIdToken");
+                    b.Property<bool>("AlwaysIncludeUserClaimsInIdToken")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("AlwaysSendClientClaims");
+                    b.Property<bool>("AlwaysSendClientClaims")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int>("AuthorizationCodeLifetime");
+                    b.Property<int>("AuthorizationCodeLifetime")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("BackChannelLogoutSessionRequired");
+                    b.Property<bool>("BackChannelLogoutSessionRequired")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("BackChannelLogoutUri")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(2000);
 
                     b.Property<string>("ClientClaimsPrefix")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
                     b.Property<string>("ClientId")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
                     b.Property<string>("ClientName")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
                     b.Property<string>("ClientUri")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(2000);
 
-                    b.Property<int?>("ConsentLifetime");
+                    b.Property<int?>("ConsentLifetime")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(1000);
 
-                    b.Property<bool>("EnableLocalLogin");
+                    b.Property<int>("DeviceCodeLifetime")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("Enabled");
+                    b.Property<bool>("EnableLocalLogin")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("FrontChannelLogoutSessionRequired");
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("FrontChannelLogoutSessionRequired")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("FrontChannelLogoutUri")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(2000);
 
-                    b.Property<int>("IdentityTokenLifetime");
+                    b.Property<int>("IdentityTokenLifetime")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IncludeJwtId");
+                    b.Property<bool>("IncludeJwtId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastAccessed")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LogoUri")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(2000);
 
+                    b.Property<bool>("NonEditable")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("PairWiseSubjectSalt")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
                     b.Property<string>("ProtocolType")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
-                    b.Property<int>("RefreshTokenExpiration");
+                    b.Property<int>("RefreshTokenExpiration")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int>("RefreshTokenUsage");
+                    b.Property<int>("RefreshTokenUsage")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("RequireClientSecret");
+                    b.Property<bool>("RequireClientSecret")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("RequireConsent");
+                    b.Property<bool>("RequireConsent")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("RequirePkce");
+                    b.Property<bool>("RequirePkce")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int>("SlidingRefreshTokenLifetime");
+                    b.Property<int>("SlidingRefreshTokenLifetime")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("UpdateAccessTokenClaimsOnRefresh");
+                    b.Property<bool>("UpdateAccessTokenClaimsOnRefresh")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserCodeType")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(100);
+
+                    b.Property<int?>("UserSsoLifetime")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -235,17 +356,20 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientClaim", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ClientId")
-                        .IsRequired();
+                    b.Property<int>("ClientId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Type")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(250);
 
                     b.Property<string>("Value")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(250);
 
                     b.HasKey("Id");
@@ -258,13 +382,15 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientCorsOrigin", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ClientId")
-                        .IsRequired();
+                    b.Property<int>("ClientId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Origin")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(150);
 
                     b.HasKey("Id");
@@ -277,13 +403,15 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientGrantType", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ClientId")
-                        .IsRequired();
+                    b.Property<int>("ClientId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("GrantType")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(250);
 
                     b.HasKey("Id");
@@ -296,13 +424,15 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientIdPRestriction", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ClientId")
-                        .IsRequired();
+                    b.Property<int>("ClientId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Provider")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -315,13 +445,15 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientPostLogoutRedirectUri", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ClientId")
-                        .IsRequired();
+                    b.Property<int>("ClientId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PostLogoutRedirectUri")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(2000);
 
                     b.HasKey("Id");
@@ -334,17 +466,20 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientProperty", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ClientId")
-                        .IsRequired();
+                    b.Property<int>("ClientId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Key")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(250);
 
                     b.Property<string>("Value")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(2000);
 
                     b.HasKey("Id");
@@ -357,13 +492,15 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientRedirectUri", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ClientId")
-                        .IsRequired();
+                    b.Property<int>("ClientId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("RedirectUri")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(2000);
 
                     b.HasKey("Id");
@@ -376,13 +513,15 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientScope", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ClientId")
-                        .IsRequired();
+                    b.Property<int>("ClientId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Scope")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -395,22 +534,31 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientSecret", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ClientId")
-                        .IsRequired();
+                    b.Property<int>("ClientId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(2000);
 
-                    b.Property<DateTime?>("Expiration");
+                    b.Property<DateTime?>("Expiration")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(250);
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasMaxLength(2000);
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(4000);
 
                     b.HasKey("Id");
 
@@ -422,13 +570,15 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.IdentityClaim", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int?>("IdentityResourceId")
-                        .IsRequired();
+                    b.Property<int>("IdentityResourceId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Type")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -441,25 +591,42 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.IdentityResource", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(1000);
 
                     b.Property<string>("DisplayName")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
-                    b.Property<bool>("Emphasize");
+                    b.Property<bool>("Emphasize")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("Enabled");
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("TEXT")
                         .HasMaxLength(200);
 
-                    b.Property<bool>("Required");
+                    b.Property<bool>("NonEditable")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ShowInDiscoveryDocument");
+                    b.Property<bool>("Required")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("ShowInDiscoveryDocument")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -469,12 +636,48 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
                     b.ToTable("IdentityResources");
                 });
 
+            modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.IdentityResourceProperty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("IdentityResourceId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(2000);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityResourceId");
+
+                    b.ToTable("IdentityProperties");
+                });
+
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiResourceClaim", b =>
                 {
                     b.HasOne("IdentityServer4.EntityFramework.Entities.ApiResource", "ApiResource")
                         .WithMany("UserClaims")
                         .HasForeignKey("ApiResourceId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiResourceProperty", b =>
+                {
+                    b.HasOne("IdentityServer4.EntityFramework.Entities.ApiResource", "ApiResource")
+                        .WithMany("Properties")
+                        .HasForeignKey("ApiResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiScope", b =>
@@ -482,7 +685,8 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasOne("IdentityServer4.EntityFramework.Entities.ApiResource", "ApiResource")
                         .WithMany("Scopes")
                         .HasForeignKey("ApiResourceId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiScopeClaim", b =>
@@ -490,7 +694,8 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasOne("IdentityServer4.EntityFramework.Entities.ApiScope", "ApiScope")
                         .WithMany("UserClaims")
                         .HasForeignKey("ApiScopeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiSecret", b =>
@@ -498,7 +703,8 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasOne("IdentityServer4.EntityFramework.Entities.ApiResource", "ApiResource")
                         .WithMany("Secrets")
                         .HasForeignKey("ApiResourceId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientClaim", b =>
@@ -506,7 +712,8 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasOne("IdentityServer4.EntityFramework.Entities.Client", "Client")
                         .WithMany("Claims")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientCorsOrigin", b =>
@@ -514,7 +721,8 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasOne("IdentityServer4.EntityFramework.Entities.Client", "Client")
                         .WithMany("AllowedCorsOrigins")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientGrantType", b =>
@@ -522,7 +730,8 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasOne("IdentityServer4.EntityFramework.Entities.Client", "Client")
                         .WithMany("AllowedGrantTypes")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientIdPRestriction", b =>
@@ -530,7 +739,8 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasOne("IdentityServer4.EntityFramework.Entities.Client", "Client")
                         .WithMany("IdentityProviderRestrictions")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientPostLogoutRedirectUri", b =>
@@ -538,7 +748,8 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasOne("IdentityServer4.EntityFramework.Entities.Client", "Client")
                         .WithMany("PostLogoutRedirectUris")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientProperty", b =>
@@ -546,7 +757,8 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasOne("IdentityServer4.EntityFramework.Entities.Client", "Client")
                         .WithMany("Properties")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientRedirectUri", b =>
@@ -554,7 +766,8 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasOne("IdentityServer4.EntityFramework.Entities.Client", "Client")
                         .WithMany("RedirectUris")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientScope", b =>
@@ -562,7 +775,8 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasOne("IdentityServer4.EntityFramework.Entities.Client", "Client")
                         .WithMany("AllowedScopes")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ClientSecret", b =>
@@ -570,7 +784,8 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasOne("IdentityServer4.EntityFramework.Entities.Client", "Client")
                         .WithMany("ClientSecrets")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.IdentityClaim", b =>
@@ -578,7 +793,17 @@ namespace AspNetCoreSpa.STS.Data.Migrations.IdentityServer.ConfigurationDb
                     b.HasOne("IdentityServer4.EntityFramework.Entities.IdentityResource", "IdentityResource")
                         .WithMany("UserClaims")
                         .HasForeignKey("IdentityResourceId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.IdentityResourceProperty", b =>
+                {
+                    b.HasOne("IdentityServer4.EntityFramework.Entities.IdentityResource", "IdentityResource")
+                        .WithMany("Properties")
+                        .HasForeignKey("IdentityResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

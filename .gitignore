@@ -186,6 +186,7 @@ ClientBin/
 *.dbmdl
 *.dbproj.schemaview
 *.pfx
+!sts_dev_cert.pfx
 *.publishsettings
 node_modules/
 ClientApp/node_modules/
@@ -231,3 +232,5 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+
+.DS_Store

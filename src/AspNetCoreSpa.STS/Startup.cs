@@ -13,21 +13,23 @@ using System.Security.Cryptography.X509Certificates;
 using AspNetCoreSpa.STS.Models;
 using AspNetCoreSpa.STS.Resources;
 using Microsoft.IdentityModel.Tokens;
+using AspNetCoreSpa.STS.Services.Certificate;
 using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc;
 using AspNetCoreSpa.STS.Services;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Hosting;
+using System.IO;
 
 namespace AspNetCoreSpa.STS
 {
     public class Startup
     {
         public static IConfiguration Configuration { get; set; }
-        public IHostingEnvironment Environment { get; }
+        public IWebHostEnvironment Environment { get; }
 
-        public Startup(IConfiguration configuration, IHostingEnvironment environment)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
             Environment = environment;
@@ -35,21 +37,7 @@ namespace AspNetCoreSpa.STS
 
         public void ConfigureServices(IServiceCollection services)
         {
-            X509Certificate2 cert;
-
-            //if (Environment.IsProduction())
-            //{
-            //    // Azure deployment, will be used if deployed to Azure
-            //    var vaultConfigSection = Configuration.GetSection("Vault");
-            //    var keyVaultService = new KeyVaultCertificateService(vaultConfigSection["Url"], vaultConfigSection["ClientId"], vaultConfigSection["ClientSecret"]);
-            //    cert = keyVaultService.GetCertificateFromKeyVault(vaultConfigSection["CertificateName"]);
-            //}
-            //else
-            //{
-            var base64EncodedStr = Convert.FromBase64String(Configuration["STSCertificate"]);
-
-            cert = new X509Certificate2(base64EncodedStr, string.Empty, X509KeyStorageFlags.MachineKeySet);
-            //}
+            var x509Certificate2 = GetCertificate(Environment, Configuration);
 
             services.Configure<StsConfig>(Configuration.GetSection("StsConfig"));
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
@@ -106,8 +94,7 @@ namespace AspNetCoreSpa.STS
                 {
                     corsBuilder.AllowAnyHeader()
                     .AllowAnyMethod()
-                    .AllowAnyOrigin()
-                    .AllowCredentials();
+                    .AllowAnyOrigin();
                 });
             });
 
@@ -115,9 +102,10 @@ namespace AspNetCoreSpa.STS
             services.AddTransient<IProfileService, CustomProfileService>();
             services.AddTransient<ApplicationDbContext>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                           .AddViewLocalization()
-                           .AddDataAnnotationsLocalization(options =>
+            services.AddControllersWithViews();
+            services.AddRazorPages()
+            .AddViewLocalization()
+            .AddDataAnnotationsLocalization(options =>
                            {
                                options.DataAnnotationLocalizerProvider = (type, factory) =>
                                {
@@ -137,7 +125,7 @@ namespace AspNetCoreSpa.STS
                     options.Events.RaiseFailureEvents = true;
                     options.Events.RaiseSuccessEvents = true;
                 })
-                .AddSigningCredential(cert)
+                .AddSigningCredential(x509Certificate2)
                 // this adds the config data from DB (clients, resources, CORS)
                 .AddConfigurationStore(options =>
                 {
@@ -183,7 +171,7 @@ namespace AspNetCoreSpa.STS
                 });
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // https://github.com/openiddict/openiddict-core/issues/518
             // And
@@ -200,7 +188,6 @@ namespace AspNetCoreSpa.STS
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -217,11 +204,58 @@ namespace AspNetCoreSpa.STS
             //     Configuration["AdminSafeList"]);
 
             app.UseStaticFiles();
+
+            app.UseRouting();
+
             app.UseCors("CorsPolicy");
+
+            app.UseAuthentication();
 
             app.UseIdentityServer();
 
-            app.UseMvcWithDefaultRoute();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
+            });
         }
-    }
+    
+        private static X509Certificate2 GetCertificate(IWebHostEnvironment environment, IConfiguration configuration)
+            {
+                var useDevCertificate = bool.Parse(configuration["UseDevCertificate"]);
+
+                X509Certificate2 cert = new X509Certificate2(Path.Combine(environment.ContentRootPath, "sts_dev_cert.pfx"), "1234");
+
+                if (environment.IsProduction() && !useDevCertificate)
+                {
+                    var useLocalCertStore = Convert.ToBoolean(configuration["UseLocalCertStore"]);
+
+                    if (useLocalCertStore)
+                    {
+                        using (X509Store store = new X509Store(StoreName.My, StoreLocation.LocalMachine))
+                        {
+                            var certificateThumbprint = configuration["CertificateThumbprint"];
+
+                            store.Open(OpenFlags.ReadOnly);
+                            var certs = store.Certificates.Find(X509FindType.FindByThumbprint, certificateThumbprint, false);
+                            cert = certs[0];
+                            store.Close();
+                        }
+                    }
+                    else
+                    {
+                        // Azure deployment, will be used if deployed to Azure
+                        var vaultConfigSection = configuration.GetSection("Vault");
+                        var keyVaultService = new KeyVaultCertificateService(vaultConfigSection["Url"], vaultConfigSection["ClientId"], vaultConfigSection["ClientSecret"]);
+                        cert = keyVaultService.GetCertificateFromKeyVault(vaultConfigSection["CertificateName"]);
+                    }
+                }
+                return cert;
+            }
+        }
+     
 }

@@ -14,14 +14,16 @@ namespace AspNetCoreSpa.Web.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.3-rtm-32065");
+                .HasAnnotation("ProductVersion", "3.1.0");
 
             modelBuilder.Entity("AspNetCoreSpa.Core.Entities.Culture", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -31,37 +33,52 @@ namespace AspNetCoreSpa.Web.Migrations
             modelBuilder.Entity("AspNetCoreSpa.Core.Entities.Customer", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("Address");
+                    b.Property<string>("Address")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("City");
+                    b.Property<string>("City")
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("CreatedAt");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
-                    b.Property<DateTime>("CreatedDate");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DateOfBirth");
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("Gender");
+                    b.Property<int>("Gender")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("PhoneNumber");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("UpdatedAt");
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UpdatedBy")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -71,29 +88,40 @@ namespace AspNetCoreSpa.Web.Migrations
             modelBuilder.Entity("AspNetCoreSpa.Core.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("Comments");
+                    b.Property<string>("Comments")
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("CreatedAt");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
-                    b.Property<DateTime>("CreatedDate");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("CustomerId");
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("Discount");
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("UpdatedAt");
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UpdatedBy")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -105,33 +133,46 @@ namespace AspNetCoreSpa.Web.Migrations
             modelBuilder.Entity("AspNetCoreSpa.Core.Entities.OrderDetail", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("CreatedAt");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
-                    b.Property<DateTime>("CreatedDate");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
 
-                    b.Property<decimal>("Discount");
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("OrderId");
+                    b.Property<int>("OrderId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int>("ProductId");
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int>("Quantity");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("UnitPrice");
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("UpdatedAt");
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UpdatedBy")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -145,43 +186,61 @@ namespace AspNetCoreSpa.Web.Migrations
             modelBuilder.Entity("AspNetCoreSpa.Core.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("BuyingPrice");
+                    b.Property<decimal>("BuyingPrice")
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("CreatedAt");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
-                    b.Property<DateTime>("CreatedDate");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Icon");
+                    b.Property<string>("Icon")
+                        .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsActive");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsDiscontinued");
+                    b.Property<bool>("IsDiscontinued")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int?>("ParentId");
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int>("ProductCategoryId");
+                    b.Property<int>("ProductCategoryId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("SellingPrice");
+                    b.Property<decimal>("SellingPrice")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("UnitsInStock");
+                    b.Property<int>("UnitsInStock")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("UpdatedAt");
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UpdatedBy")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -195,29 +254,40 @@ namespace AspNetCoreSpa.Web.Migrations
             modelBuilder.Entity("AspNetCoreSpa.Core.Entities.ProductCategory", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("CreatedAt");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedBy")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
-                    b.Property<DateTime>("CreatedDate");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Icon");
+                    b.Property<string>("Icon")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("UpdatedAt");
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UpdatedBy")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(256);
 
-                    b.Property<DateTime>("UpdatedDate");
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -227,13 +297,17 @@ namespace AspNetCoreSpa.Web.Migrations
             modelBuilder.Entity("AspNetCoreSpa.Core.Entities.Resource", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CultureId");
+                    b.Property<int?>("CultureId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("Key");
+                    b.Property<string>("Key")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -247,7 +321,8 @@ namespace AspNetCoreSpa.Web.Migrations
                     b.HasOne("AspNetCoreSpa.Core.Entities.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AspNetCoreSpa.Core.Entities.OrderDetail", b =>
@@ -255,12 +330,14 @@ namespace AspNetCoreSpa.Web.Migrations
                     b.HasOne("AspNetCoreSpa.Core.Entities.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("AspNetCoreSpa.Core.Entities.Product", "Product")
                         .WithMany("OrderDetails")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AspNetCoreSpa.Core.Entities.Product", b =>
@@ -272,7 +349,8 @@ namespace AspNetCoreSpa.Web.Migrations
                     b.HasOne("AspNetCoreSpa.Core.Entities.ProductCategory", "ProductCategory")
                         .WithMany("Products")
                         .HasForeignKey("ProductCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AspNetCoreSpa.Core.Entities.Resource", b =>
